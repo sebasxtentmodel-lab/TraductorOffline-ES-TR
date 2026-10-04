@@ -24,7 +24,23 @@ class MainActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            outputText.text = TranslationEngine.translate(text)
+            outputText.text = "Traduciendo..."
+
+            TranslationEngine.translate(
+                text = text,
+                onSuccess = { result ->
+                    outputText.text = result
+                },
+                onError = { error ->
+                    outputText.text =
+                        "No se pudo traducir: ${error.message ?: "error desconocido"}"
+                }
+            )
         }
+    }
+
+    override fun onDestroy() {
+        TranslationEngine.close()
+        super.onDestroy()
     }
 }
